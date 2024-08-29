@@ -4,6 +4,7 @@ import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_CA;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_ENDPOINT;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_GROUP;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_INSTANCE;
+import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_REQUEST_JOURNAL;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_REQUEST_TIMEOUT;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_TLS;
 import static org.dcache.nearline.cta.CtaNearlineStorage.CTA_USER;
@@ -665,6 +666,18 @@ public class CtaNearlineStorageTest {
         driver.remove(Set.of(request));
 
         verify(request, times(1)).failed(any(CacheException.class));
+    }
+
+    @Test
+    public void testCleanupJournalInitialization() {
+
+        var request = mockedStageRequest();
+        driver = new CtaNearlineStorage("foo", "bar");
+        drvConfig.put(CTA_REQUEST_JOURNAL, "/tmp/cta-journal");
+        driver.configure(drvConfig);
+        driver.start();
+
+        driver.stage(Set.of(request));
     }
 
     private FlushRequest mockedFlushRequest() {

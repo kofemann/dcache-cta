@@ -224,4 +224,8 @@ public class DataMover extends AbstractIdleService implements CtaTransportProvid
               .setReportUrl(reporterUrl)
               .build();
     }
+
+    public String getId() {
+        return url;
+    }
 }
